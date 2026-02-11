@@ -33,7 +33,14 @@ class InvoiceExtractionAgent(BaseAgent):
         logger.info(f"[TOOLS] Extracting text from file type={ext}")
 
         if ext == ".pdf":
-            return extract_text_from_pdf(file_path)
+            text = extract_text_from_pdf(file_path)
+
+            # If no real text found → fallback to OCR
+            if not text or len(text.strip()) < 20:
+                logger.info("[OCR FALLBACK] No text layer detected, using OCR")
+                text = extract_text_with_ocr(file_path)
+
+            return text
 
         elif ext in [".png", ".jpg", ".jpeg"]:
             return extract_text_from_image(file_path)
