@@ -1,0 +1,126 @@
+Company_Policies_2025.txt
+Company Name: Apex Innovations Pvt Ltd
+HR Policy Manual – Core Policies 2025
+Last updated: January 2025
+
+1. Purpose & Scope
+This document outlines the key human resources policies applicable to all employees of Apex Innovations Pvt Ltd (the "Company"). These policies are designed to ensure a fair, safe, respectful and productive work environment.
+
+All employees, contractors, interns and consultants are expected to read, understand and comply with these policies. Violation may result in disciplinary action up to and including termination.
+
+2. Working Hours & Attendance
+• Standard work week: Monday–Friday
+• Core working hours: 9:30 AM – 6:30 PM (including 1 hour lunch break)
+• Flexible start time allowed between 8:00 AM – 11:00 AM (with manager approval)
+• Employees must maintain minimum 40 productive hours per week (excluding lunch)
+• Remote work: Allowed up to 3 days/week after completion of probation (subject to manager approval)
+• Attendance tracking: Biometric + self-reported timesheet in HRMS (Zoho People / equivalent)
+
+Late arrival policy:
+• 0–15 min late: considered grace (max 3 times/month)
+• 16–60 min late: 0.5 day leave deduction or salary deduction
+• >60 min late: full day deduction unless pre-approved
+
+3. Leave Policy
+Entitlements (for employees completing 12 months):
+
+Type                  Days per year   Notes
+------------------------------------------------------
+Privilege/Earned Leave     18         Can be encashed (max 15 days)
+Sick Leave                 12         Half-pay after 3 continuous days needs MC
+Casual Leave                8         Max 3 days at a time
+Maternity Leave            26 weeks   As per Maternity Benefit Act + 8 weeks additional paid (company policy)
+Paternity Leave            15 days    Within first 6 months of child birth/adoption
+Bereavement Leave           5 days    Immediate family only
+Marriage Leave              7 days     Once during employment
+Adoption Leave             26 weeks   For commissioning/adoptive mothers
+
+Leave application must be made at least 7 days in advance (except sick leave). Unapproved absence > 3 days = deemed abandonment of service.
+
+4. Code of Conduct & Workplace Behaviour
+4.1 Anti-Harassment & POSH Policy
+The Company maintains zero tolerance for sexual harassment, bullying, discrimination based on gender, caste, religion, age, disability, marital status, sexual orientation or any other protected characteristic.
+
+All complaints will be investigated within 30–45 days as per the POSH Act 2013. Retaliation against complainant is strictly prohibited.
+
+4.2 Gifts & Conflicts of Interest
+Employees shall not accept gifts > ₹5,000 from vendors/clients without disclosure to HR.  
+Any personal/family financial interest in a vendor/client must be declared annually.
+
+4.3 Confidentiality & Data Protection
+All company data, client information, source code, financials, strategies are strictly confidential.  
+Employees must sign NDA on Day 1. Breach may result in civil & criminal action.
+
+4.4 Social Media & Public Statements
+Employees must not post anything that:
+- damages company reputation
+- discloses confidential information
+- appears to speak on behalf of the company (unless authorized)
+
+5. Dress Code & Grooming
+• Monday–Thursday: Business casual / Smart casual
+• Friday: Casual (no shorts, sleeveless, torn clothing, flip-flops)
+• Client-facing meetings / interviews: Formal business attire
+• Safety-critical areas (lab/server room): Closed shoes mandatory
+
+6. Performance & Increments
+• Annual appraisal cycle: April–March
+• Increments usually communicated in May–June
+• Performance rating scale: 1–5 (5 = Exceptional)
+• Promotion eligibility: minimum 18 months in current role + consistent “4” or above rating
+
+7. Termination & Notice Period
+Category              Notice Period         Garden Leave possible?
+---------------------------------------------------------------
+Probation (0–6 months)       15 days              No
+Confirmed employee           60 days              Yes (up to 60 days)
+Manager & above              90 days              Yes
+Termination for cause         Immediate           No notice / severance
+
+Full & final settlement will be processed within 45 days of last working day after receiving all company assets.
+
+8. Remote Work & Hybrid Policy (2025)
+• Eligible after 6 months of service
+• Maximum 60% remote work (3 days/week)
+• Must be available during core hours 10:00 AM – 5:00 PM
+• Must attend office for:
+  - All-hands meetings
+  - Client visits
+  - Team onboarding/offsite
+  - Performance reviews (at least quarterly)
+• Stable internet connection (minimum 50 Mbps) is employee responsibility
+
+9. Employee Benefits – Summary
+• Group Health Insurance: ₹5 lakh coverage (employee + spouse + 2 children)
+• Personal Accident Insurance: ₹10 lakh
+• Term Life Insurance: 36× monthly CTC
+• Mediclaim top-up available (employee contribution)
+• Provident Fund + Gratuity as per statute
+• Annual Health Check-up (₹3,000 reimbursement)
+• Learning & Development: ₹15,000/year reimbursement (approved courses)
+
+10. Disciplinary Procedure
+Step 1: Verbal warning + documented discussion
+Step 2: Written warning
+Step 3: Final written warning + Performance Improvement Plan (30–90 days)
+Step 4: Termination
+
+Immediate termination possible for: theft, fraud, sexual harassment, violence, gross insubordination, sharing confidential data externally, intoxication at workplace.
+
+11. Grievance Redressal
+Employees can raise grievance to:
+1. Immediate Manager
+2. HR Business Partner
+3. Grievance Committee (comprising CHRO + 2 senior leaders)
+
+Anonymous reporting channel available via email: ethics@apexinnovations.in
+
+12. Acknowledgement
+I have received, read and understood the above policies. I agree to comply with them during my employment.
+
+Employee Name: ___________________________  
+Employee ID: ______________________________  
+Date: ____________________________________  
+Signature: ________________________________
+
+--- End of Core HR Policy Document ---
