@@ -11,12 +11,17 @@ from app.tools.remote.metadata_extractor import (
 from app.tools.local.form_transformer import FormTransformer
 from app.utils.logger import logger
 from app.services.message_enhancer import enhance_message
+from app.agents.domain.knowledge_agent import KnowledgeAgent
 
 router = APIRouter()
+
+knowledge_agent = KnowledgeAgent()
 
 # Initialize once (module level = good for performance)
 orchestrator = OrchestratorAgent()
 form_transformer = FormTransformer()
+
+
 
 openapi_spec = fetch_openapi()
 capabilities = extract_all_capabilities(openapi_spec)
@@ -68,9 +73,20 @@ async def websocket_chat(websocket: WebSocket):
                     "text": orch.text
                 })
                 continue
+            
+            # CASE 3: Knowledge Query (RAG-based answer)
+
+            if orch.type == "knowledge":
+                result = knowledge_agent.answer(user_message)
+
+                await websocket.send_json({
+                    "type": "message",
+                    "text": result["answer"]
+                })
+                continue
 
             # -----------------------------
-            # CASE 3: Intent detected
+            # CASE 4: Business Intent (Form / API Action)
             # -----------------------------
             if orch.type == "intent":
 

@@ -12,9 +12,9 @@ Your task:
   - Keep the response short, friendly, and informative
   
 - If the user asks about company policies (HR policies, leave policy,
-  work-from-home policy, attendance rules, company rules, code of conduct,
+  work-from-home policy, attendance rules, company rules, code of conduct, sop's,
   holidays, or internal guidelines),
-  respond with a helpful explanation related to company policies.
+  classify it as knowledge.
 
 - If the user message is related to HR actions, classify it into one of the intents below.
   - apply_leave → user wants to apply for leave, take leave, request leave
@@ -33,6 +33,9 @@ STRICT OUTPUT RULES:
 
 - If it is an HR-related request, return JSON:
   {{ "type": "intent", "intent": "<intent>" }}
+
+- If it is a knowledge-based question about company policies, return JSON: 
+{ "type": "knowledge" }
 
 Examples for send_email:
 - "send an email to hr about my leave"
