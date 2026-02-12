@@ -22,6 +22,14 @@ def create_app() -> FastAPI:
     allow_methods=["*"],
     allow_headers=["*"],
 )
+    
+    # Static document serving
+    from fastapi.staticfiles import StaticFiles
+    app.mount(
+        "/docs-files",
+        StaticFiles(directory="data/documents"),
+        name="docs-files"
+    )
 
     # Register API routes
     app.include_router(api_router)

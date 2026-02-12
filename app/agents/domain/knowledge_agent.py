@@ -36,13 +36,37 @@ class KnowledgeAgent(BaseAgent):
             #return super().run(grounded_prompt)   #---> If we dont need to show the metadata source pages we can use this alone..
             answer = super().run(grounded_prompt)
 
-            sources = [
-                {
-                    "source": doc.metadata.get("source", "unknown"),
-                    "page": doc.metadata.get("page", "N/A")
-                }
-                for doc in docs
-            ]
+            # sources = [
+            #     {
+            #         "source": doc.metadata.get("source", "unknown"),
+            #         "page": doc.metadata.get("page", "N/A")
+            #     }
+            #     for doc in docs
+            # ]
+
+            # return {
+            #     "answer": answer,
+            #     "sources": sources
+            # }
+
+            sources = []
+
+            for doc in docs:
+                raw_path = doc.metadata.get("source", "")
+                file_name = os.path.basename(raw_path)
+                page = doc.metadata.get("page", "N/A")
+
+                # Public URL (served via FastAPI static mount)
+                url = f"/docs-files/{file_name}"
+
+                if page != "N/A":
+                    url = f"{url}#page={page}"
+
+                sources.append({
+                    "file_name": file_name,
+                    "page": page,
+                    "url": url
+                })
 
             return {
                 "answer": answer,
