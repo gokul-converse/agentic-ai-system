@@ -2,6 +2,7 @@ from typing import List, Dict
 from app.agents.base import BaseAgent
 from app.rag.vectorstore import load_vectorstore
 from app.utils.logger import logger
+import os
 
 class KnowledgeAgent(BaseAgent):
     def __init__(self):

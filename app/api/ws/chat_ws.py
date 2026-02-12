@@ -79,10 +79,16 @@ async def websocket_chat(websocket: WebSocket):
             if orch.type == "knowledge":
                 result = knowledge_agent.answer(user_message)
 
+                # await websocket.send_json({
+                #     "type": "message",
+                #     "text": result["answer"]
+                # })
+
                 await websocket.send_json({
-                    "type": "message",
-                    "text": result["answer"]
-                })
+                "type": "knowledge",
+                "answer": result["answer"],
+                "sources": result["sources"]
+            })
                 continue
 
             # -----------------------------

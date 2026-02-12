@@ -1,4 +1,4 @@
-# Loaders
+# Loaders python -m tests.test_rag
 from app.rag.loader import load_documents
 from app.rag.chunker import chunk_documents
 from app.rag.vectorstore import build_vectorstore
