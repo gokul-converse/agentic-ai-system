@@ -161,6 +161,64 @@ User input:
 
         else:
             raise ValueError(f"Unsupported LLM_PROVIDER: {self.provider}")
+        
+    def call_llm_with_tools(self, user_input: str, tools: list):
+        """
+        LLM call with tool support.
+        Returns raw message object for tool handling.
+        """
+
+        # -------- Azure OpenAI --------
+        if self.provider == "azure":
+            logger.info(f"[LLM TOOL CALL] provider=azure | deployment={self.deployment} | agent={self.name}")
+
+            try:
+                messages = self._build_azure_messages(user_input)
+
+                response = self.llm.chat.completions.create(
+                    model=self.deployment,
+                    messages=messages,
+                    tools=tools,
+                    tool_choice="auto",
+                    temperature=0.2,
+                    max_tokens=2000
+                )
+
+                message = response.choices[0].message
+
+                return message  # contains .content and .tool_calls
+            
+            except Exception:
+                logger.exception(f"[LLM TOOL ERROR] provider=azure | agent={self.name}")
+                raise
+
+
+        # -------- Gemini --------
+        elif self.provider == "gemini":
+            model_name = os.getenv("GEMINI_MODEL")
+
+            logger.info(f"[LLM TOOL CALL] provider=gemini | model={model_name} | agent={self.name}")
+
+            try:
+                prompt = self._build_gemini_prompt(user_input)
+
+                response = self.llm.models.generate_content(
+                    model=model_name,
+                    contents=prompt,
+                    tools=tools
+                )
+
+                candidate = response.candidates[0]
+                content = candidate.content
+
+                return content  # will inspect for tool_calls later
+            
+            except Exception:
+                logger.exception(f"[LLM TOOL ERROR] provider=gemini | agent={self.name}")
+                raise
+
+        else:
+            raise ValueError(f"Unsupported LLM_PROVIDER: {self.provider}")
 
     # -------------------------
     # Public entrypoint

@@ -43,22 +43,6 @@ Examples for send_email:
 - "send email to gokul@gmail.com regarding project update"
 - "email hari about today's meeting"
 
-If the user wants to send an email, return JSON ONLY in this format:
-{{
-  "type": "tool",
-  "tool": "send_email",
-  "text": {{
-    "to": "<email address or person name>",
-    "subject": "<email subject>",
-    "body": "<email body>"
-  }}
-}}
-
-Rules:
-- Extract recipient, subject, and body from the user message
-- If subject is not explicitly mentioned, infer a short subject
-- If body is not explicit, rewrite the user message as a polite email
-
 FINAL RULES:
 - Return JSON ONLY.
 - Do NOT include explanations.

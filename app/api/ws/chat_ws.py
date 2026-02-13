@@ -12,10 +12,12 @@ from app.tools.local.form_transformer import FormTransformer
 from app.utils.logger import logger
 from app.services.message_enhancer import enhance_message
 from app.agents.domain.knowledge_agent import KnowledgeAgent
+from app.agents.domain.email_agent import EmailAgent
 
 router = APIRouter()
 
 knowledge_agent = KnowledgeAgent()
+email_agent = EmailAgent()
 
 # Initialize once (module level = good for performance)
 orchestrator = OrchestratorAgent()
@@ -63,17 +65,7 @@ async def websocket_chat(websocket: WebSocket):
                 })
                 continue
 
-            # -----------------------------
-            # CASE 2: Tool call (e.g., email)
-            # -----------------------------
-            if orch.type == "tool":
-                await websocket.send_json({
-                    "type": "tool",
-                    "tool": orch.tool,
-                    "text": orch.text
-                })
-                continue
-            
+
             # CASE 3: Knowledge Query (RAG-based answer)
 
             if orch.type == "knowledge":
@@ -98,6 +90,25 @@ async def websocket_chat(websocket: WebSocket):
 
                 intent = orch.intent
                 logger.info(f"[WS] Intent detected: {intent}")
+
+                # Add Email Intent Handling
+                if intent == "send_email":
+                    result = email_agent.generate_email(user_message)
+
+                    if result.get("type") == "confirm_email":
+                        await websocket.send_json({
+                        "type": "tool",
+                        "tool": "send_email",
+                        "text": result["data"]
+                    })
+                    else:
+                        await websocket.send_json({
+                            "type": "message",
+                            "text": result.get("message", "Failed to generate email.")
+                        })
+
+                    continue
+
 
                 # ---- Special read-only APIs ----
 
