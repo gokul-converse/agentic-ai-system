@@ -32,7 +32,7 @@ STRICT OUTPUT RULES:
   {{ "type": "chat", "reply": "<your reply>" }}
 
 - If it is an HR-related request, return JSON:
-  {{ "type": "intent", "intent": "<intent>" }}
+  { "type": "intent", "intent": "<intent>" }
 
 - If it is a knowledge-based question about company policies, return JSON: 
 { "type": "knowledge" }
