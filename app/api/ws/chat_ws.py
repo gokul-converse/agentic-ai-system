@@ -41,6 +41,44 @@ async def websocket_chat(websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_json()
+
+            # FIRST: HANDLE TOOL EXECUTION - User clicks send, FE sends execute tool , BE detects type == execute tool, calls mcp, mcp calls BE mail api, return sucess, BE sends success message
+            # ---------------------------------- execute_tool → goes to MCP
+            if data.get("type") == "execute_tool":
+
+                tool_name = data.get("tool")
+                arguments = data.get("data")
+
+                logger.info(f"[WS] Executing tool via MCP: {tool_name}")
+
+                try:
+                    response = requests.post(
+                        "http://localhost:9000/execute",
+                        json={
+                            "tool_name": tool_name,
+                            "arguments": arguments
+                        },
+                        timeout=25
+                    )
+
+                    response.raise_for_status()
+                    result = response.json()
+
+                    await websocket.send_json({
+                        "type": "message",
+                        "text": result.get("message", "Tool executed successfully.")
+                    })
+
+                except Exception as e:
+                    logger.exception("[WS] MCP execution failed")
+                    await websocket.send_json({
+                        "type": "message",
+                        "text": "Failed to execute tool."
+                    })
+
+                continue
+
+            # HANDLE NORMAL CHAT
             user_message = data.get("message")
 
             if not user_message:
