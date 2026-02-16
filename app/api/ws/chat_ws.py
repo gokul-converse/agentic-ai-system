@@ -28,7 +28,14 @@ form_transformer = FormTransformer()
 openapi_spec = fetch_openapi()
 capabilities = extract_all_capabilities(openapi_spec)
 
-
+# this is for not running 8001 env - it should work for those who dont want HR actions.. in that case also this file should run
+def is_hr_service_available():
+    try:
+        requests.get("http://localhost:8001/health", timeout=2)
+        return True
+    except:
+        return False
+    
 # -----------------------------
 # WebSocket Endpoint
 # -----------------------------
@@ -151,6 +158,14 @@ async def websocket_chat(websocket: WebSocket):
                 # ---- Special read-only APIs ----
 
                 if intent == "get_leave_calendar":
+
+                    if not is_hr_service_available():
+                        await websocket.send_json({
+                            "type": "message",
+                            "text": "HR service is not running in this environment."
+                        })
+                        continue
+
                     try:
                         resp = requests.get("http://localhost:8001/leave/calender", timeout=5)
                         resp.raise_for_status()
@@ -167,6 +182,13 @@ async def websocket_chat(websocket: WebSocket):
                     continue
 
                 if intent == "get_all_employees":
+                    if not is_hr_service_available():
+                        await websocket.send_json({
+                            "type": "message",
+                            "text": "HR service is not running in this environment."
+                        })
+                        continue
+                    
                     try:
                         resp = requests.get("http://localhost:8001/employee/employees")
                         resp.raise_for_status()
@@ -183,6 +205,13 @@ async def websocket_chat(websocket: WebSocket):
                     continue
 
                 if intent == "get_pending_leaves":
+                    if not is_hr_service_available():
+                        await websocket.send_json({
+                            "type": "message",
+                            "text": "HR service is not running in this environment."
+                        })
+                        continue
+                                    
                     try:
                         resp = requests.get("http://localhost:8001/leave/pending/leave")
 
@@ -216,6 +245,13 @@ async def websocket_chat(websocket: WebSocket):
                     continue
 
                 if intent == "get_upcoming_leaves":
+                    if not is_hr_service_available():
+                        await websocket.send_json({
+                            "type": "message",
+                            "text": "HR service is not running in this environment."
+                        })
+                        continue
+
                     try:
                         resp = requests.get("http://localhost:8001/leave/details")
 
