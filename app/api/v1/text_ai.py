@@ -8,7 +8,7 @@ from app.agents.domain.sentiment_analysis_agent import SentimentAgent
 
 from app.utils.logger import logger
 
-router = APIRouter(prefix="/ai", tags = ["AI Features"])
+router = APIRouter(prefix="/text", tags = ["AI Features"])
 
 summarizer = SummarizationAgent()
 classifier = ClassificationAgent()
