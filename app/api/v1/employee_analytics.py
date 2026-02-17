@@ -8,7 +8,4 @@ agent = EmployeeAnalyticsAgent()
 
 @router.post("/employee-analytics")
 def analyze_employee(payload: EmployeeAnalyticsRequest):
-    """
-    Receives employee analytics input from frontend via API
-    """
     return agent.run(payload.dict())

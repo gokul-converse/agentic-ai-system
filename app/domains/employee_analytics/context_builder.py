@@ -1,35 +1,58 @@
-# app/domains/employee_analytics/context_builder.py
+from typing import Dict, List
+
 
 class EmployeeAnalyticsContextBuilder:
-    """
-    Builds clean analytical context from frontend payload
-    for chart + axis decision.
-    """
-
-    def build(self, payload: dict) -> dict:
+    def build(self, payload: Dict) -> Dict:
         table_name = payload["table_name"]
-        selected_column = payload["selected_column"]
-        existing_columns = payload["existing_columns"]
+        columns = payload["existing_columns"]
+        selected = payload["selected_column"]
 
-        metric = selected_column["name"]
-        metric_type = selected_column.get("data_type", "number")
+        metric_name = selected["name"]
 
-        # Dimension candidates = NON-metric columns
-        dimension_candidates = [
-            col["name"]
-            for col in existing_columns
-            if col["name"] != metric
-        ]
+        # 🔒 Validate metric exists in schema
+        metric_column = next(
+            (
+                c for c in columns
+                if c.get("name", "").strip().lower()
+                == metric_name.strip().lower()
+            ),
+            None
+        )
+
+        if not metric_column:
+            raise ValueError(
+                f"Metric '{metric_name}' not found in existing_columns"
+            )
+
+        # 🔥 UI-GRID RULE (THIS SOLVES EVERYTHING)
+        # Each column is its OWN table
+        y_table_name = metric_name
+
+        # X-axis candidates → string columns from base grid
+        x_candidates: List[str] = []
+        for c in columns:
+            col_type = c.get("type") or c.get("data_type")
+            if (
+                col_type == "string"
+                and c.get("parent_table") == table_name
+            ):
+                x_candidates.append(c["name"])
+
+        # Defensive fallback
+        if not x_candidates:
+            for c in columns:
+                col_type = c.get("type") or c.get("data_type")
+                if col_type == "string":
+                    x_candidates.append(c["name"])
+
+        if not x_candidates:
+            raise ValueError("No valid string columns for x-axis")
 
         return {
-            "user_prompt": (
-                f"Choose the best x-axis column to visualize "
-                f"{metric} from table {table_name}"
-            ),
             "table_name": table_name,
-            "metric": metric,
-            "metric_type": metric_type,
-            "available_dimensions": dimension_candidates,
-            "columns_metadata": existing_columns,
-            "table_description": payload.get("table_description", "")
+            "metric": metric_name,
+            "x_table_name": table_name,
+            "y_table_name": y_table_name,
+            "metric_is_separated": metric_column.get("is_separated", False),
+            "x_candidates": x_candidates,
         }

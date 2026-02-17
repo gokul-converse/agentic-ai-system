@@ -1,4 +1,5 @@
 import json
+
 from app.agents.base import BaseAgent
 from app.utils.logger import logger
 
@@ -14,12 +15,6 @@ from app.domains.employee_analytics.validator import (
 
 
 class EmployeeAnalyticsAgent(BaseAgent):
-    """
-    Employee Analytics Agent
-    - Fully inherits bro's BaseAgent
-    - No infra logic touched
-    - Works with API / WS / Orchestrator
-    """
 
     def __init__(self):
         super().__init__(
@@ -28,47 +23,45 @@ class EmployeeAnalyticsAgent(BaseAgent):
         )
 
     def run(self, payload: dict) -> dict:
-        """
-        payload = structured frontend input (NOT plain text)
-        """
-
         logger.info("[EmployeeAnalyticsAgent] Started")
 
-        # 1️⃣ Build context from frontend payload
+        # 1️⃣ Build context (SINGLE SOURCE OF TRUTH)
         context = EmployeeAnalyticsContextBuilder().build(payload)
 
-        # 2️⃣ Build prompt (THIS is what LLM sees)
-        prompt = employee_analytics_prompt(context)
+        # Safety: context builder must guarantee x_candidates
+        if not context.get("x_candidates"):
+            raise ValueError("No valid x-axis candidates available")
 
-        # 3️⃣ Call LLM via inherited BaseAgent method
+        # 2️⃣ Ask LLM ONLY for chart type + x-axis
+        prompt = employee_analytics_prompt(context)
         raw = self.call_llm(prompt)
 
-        # 4️⃣ Safe parse + fallback
-        if not raw or raw.strip() == "{}":
-            logger.warning("[EmployeeAnalyticsAgent] Using fallback logic")
-            chart_type = "bar"
-            x_axis = "position"
-        else:
+        # Defaults (safe fallback)
+        chart_type = "bar"
+        x_axis = context["x_candidates"][0]
+
+        # 3️⃣ Parse LLM response safely
+        if raw:
             try:
                 parsed = json.loads(raw)
-                chart_type = parsed.get("chart_type", "bar")
-                x_axis = parsed.get("x_axis", "position")
+                chart_type = parsed.get("chart_type", chart_type)
+                x_axis = parsed.get("x_axis", x_axis)
             except Exception:
-                logger.warning("[EmployeeAnalyticsAgent] Invalid LLM JSON, fallback applied")
-                chart_type = "bar"
-                x_axis = "position"
+                logger.warning(
+                    "[EmployeeAnalyticsAgent] Failed to parse LLM output, using defaults"
+                )
 
-        # 5️⃣ Validate LLM decision
+        # 4️⃣ Validate chosen x-axis
         EmployeeAnalyticsValidator.validate(x_axis, context)
 
-        # 6️⃣ Final response (FRONTEND CONTRACT)
+        # 5️⃣ FINAL RESPONSE (NO TABLE LOGIC HERE 🔥)
         return {
             "table_name": context["table_name"],
             "chart": {
                 "type": chart_type,
                 "x": x_axis,
                 "y": context["metric"],
-                "x_table_name": f"{x_axis}s",
-                "y_table_name": context["table_name"]
+                "x_table_name": context["x_table_name"],
+                "y_table_name": context["y_table_name"],
             }
         }
