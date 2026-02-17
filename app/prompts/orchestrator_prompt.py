@@ -29,7 +29,7 @@ Your task:
 
 STRICT OUTPUT RULES:
 - If it is general conversation, return JSON:
-  {{ "type": "chat", "reply": "<your reply>" }}
+  { "type": "chat", "reply": "<your reply>" }
 
 - If it is an HR-related request, return JSON:
   { "type": "intent", "intent": "<intent>" }
