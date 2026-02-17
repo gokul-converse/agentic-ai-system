@@ -1,11 +1,14 @@
 from fastapi import APIRouter
 from app.agents.domain.employee_analytics import EmployeeAnalyticsAgent
-from app.mock.employee_analytics_payload import EMPLOYEE_ANALYTICS_SAMPLE
+from app.models.employee_analytics_models import EmployeeAnalyticsRequest
 
-router = APIRouter()
+router = APIRouter(tags=["Employee Analytics"])
 agent = EmployeeAnalyticsAgent()
 
 
 @router.post("/employee-analytics")
-def analyze_employee():
-    return agent.run(EMPLOYEE_ANALYTICS_SAMPLE)
+def analyze_employee(payload: EmployeeAnalyticsRequest):
+    """
+    Receives employee analytics input from frontend via API
+    """
+    return agent.run(payload.dict())
