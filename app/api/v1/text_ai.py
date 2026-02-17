@@ -33,3 +33,4 @@ def analyze_sentiment(payload: TextInput):
     logger.info("[API] /ai/sentiment called")
     result = sentimenter.analyse(payload.text)
     return {"sentiment": result}
+
