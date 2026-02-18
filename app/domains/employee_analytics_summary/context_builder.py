@@ -17,5 +17,5 @@ class EmployeeAnalyticsSummaryContextBuilder:
                 "min": aggregations.get("min"),
                 "max": aggregations.get("max"),
                 "sum": aggregations.get("sum"),
-            }
+            },
         }

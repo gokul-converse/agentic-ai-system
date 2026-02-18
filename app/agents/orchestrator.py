@@ -1,6 +1,7 @@
 import json
 import re
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
+
 from pydantic import BaseModel
 
 from app.agents.base import BaseAgent
@@ -22,7 +23,7 @@ class OrchestratorAgent(BaseAgent):
         super().__init__(name="orchestrator_agent", role="System Orchestrator")
         self.system_prompt = ORCHESTRATOR_SYSTEM_PROMPT
 
-    def _safe_json_parse(self, raw:str) -> dict:
+    def _safe_json_parse(self, raw: str) -> dict:
         """
         Cleans and safely parse llm json output,
         Prevents crashes from gemini formatting issues.
@@ -30,7 +31,7 @@ class OrchestratorAgent(BaseAgent):
 
         if not raw or not raw.strip():
             raise ValueError("Empty LLM Response")
-        
+
         raw = re.sub(r"```json", "", raw, flags=re.IGNORECASE)
         raw = re.sub(r"```", "", raw)
         raw = raw.strip()
@@ -42,7 +43,7 @@ class OrchestratorAgent(BaseAgent):
         logger.info("[AGENT] orchestrator_agent invoked")
 
         response = self.run(user_message)
-        #print("RAW LLM RESPONSE:", response)
+        # print("RAW LLM RESPONSE:", response)
 
         try:
             data = self._safe_json_parse(response)
@@ -53,6 +54,5 @@ class OrchestratorAgent(BaseAgent):
 
             # Safe fallback (prevents WS crash)
             return OrchestratorResponse(
-                type="chat",
-                reply="I had trouble understanding that. Please try again."
+                type="chat", reply="I had trouble understanding that. Please try again."
             )

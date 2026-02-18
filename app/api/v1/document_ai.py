@@ -1,8 +1,8 @@
 import os
-import uuid
 import shutil
+import uuid
 
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter, File, HTTPException, UploadFile
 
 from app.agents.domain.document_extraction_agent import InvoiceExtractionAgent
 from app.utils.logger import logger

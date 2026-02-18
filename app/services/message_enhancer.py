@@ -1,5 +1,6 @@
-from app.services.llm_factory import get_llm
 import os
+
+from app.services.llm_factory import get_llm
 
 llm = get_llm()
 provider = os.getenv("LLM_PROVIDER", "azure")
@@ -25,9 +26,9 @@ def enhance_message(raw_message: str) -> str:
             model=deployment,
             messages=[
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": raw_message}
+                {"role": "user", "content": raw_message},
             ],
-            temperature=0.3
+            temperature=0.3,
         )
         return response.choices[0].message.content.strip()
 
@@ -40,8 +41,5 @@ Message:
 {raw_message}
 """.strip()
 
-        response = llm.models.generate_content(
-            model=model_name,
-            contents=prompt
-        )
+        response = llm.models.generate_content(model=model_name, contents=prompt)
         return response.text.strip()

@@ -1,9 +1,9 @@
 import json
 import os
-from typing import Dict, Any
+from typing import Any, Dict
 
-from app.services.llm_factory import get_llm
 from app.prompts.tools.form_transformer_prompt import FORM_TRANSFORM_SYSTEM_PROMPT
+from app.services.llm_factory import get_llm
 from app.utils.logger import logger
 
 
@@ -17,7 +17,7 @@ class FormTransformer:
     def _build_azure_messages(self, form_json: dict):
         return [
             {"role": "system", "content": FORM_TRANSFORM_SYSTEM_PROMPT},
-            {"role": "user", "content": json.dumps(form_json)}
+            {"role": "user", "content": json.dumps(form_json)},
         ]
 
     def _build_gemini_prompt(self, form_json: dict) -> str:
@@ -45,7 +45,7 @@ INPUT JSON:
                     model=self.deployment,
                     messages=messages,
                     temperature=0.0,
-                    max_tokens=4000
+                    max_tokens=4000,
                 )
 
                 content = response.choices[0].message.content.strip()
@@ -58,8 +58,7 @@ INPUT JSON:
                 prompt = self._build_gemini_prompt(form_json)
 
                 response = self.llm.models.generate_content(
-                    model=model_name,
-                    contents=prompt
+                    model=model_name, contents=prompt
                 )
 
                 content = response.text.strip()
@@ -89,6 +88,3 @@ INPUT JSON:
         except Exception:
             logger.exception("[TOOL ERROR] Invalid JSON from FormTransformer")
             raise
-
-
-

@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 
+
 class TextInput(BaseModel):
     text: str
-
 
 
 """
@@ -13,6 +13,7 @@ So you don’t need to add a request model here.
 
 (Your earlier text APIs needed it. Document upload doesn’t.)
 """
+
 
 class ChatRequest(BaseModel):
     message: str

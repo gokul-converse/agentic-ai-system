@@ -1,5 +1,6 @@
+from typing import Any, Dict, List, Optional
+
 import requests
-from typing import List, Dict, Any, Optional
 
 from app.utils.logger import logger
 
@@ -18,6 +19,7 @@ INTENT_MAP = {
 
 # Fetch OpenAPI
 
+
 def fetch_openapi() -> Dict[str, Any]:
     logger.info("[METADATA] Fetching OpenAPI spec")
 
@@ -31,7 +33,9 @@ def fetch_openapi() -> Dict[str, Any]:
         logger.exception("[METADATA ERROR] Failed to fetch OpenAPI")
         raise
 
+
 # Extract capabilities
+
 
 def extract_all_capabilities(openapi_json: Dict[str, Any]) -> List[Dict[str, Any]]:
     logger.info("[METADATA] Extracting capabilities from OpenAPI")
@@ -62,13 +66,17 @@ def extract_all_capabilities(openapi_json: Dict[str, Any]) -> List[Dict[str, Any
 
                 schema_name = json_schema["$ref"].split("/")[-1]
 
-                capabilities.append({
-                    "intent": intent,
-                    "method": method_upper,
-                    "path": path,
-                    "schema": schema_name,
-                    "description": details.get("summary", intent.replace("_", " ").title())
-                })
+                capabilities.append(
+                    {
+                        "intent": intent,
+                        "method": method_upper,
+                        "path": path,
+                        "schema": schema_name,
+                        "description": details.get(
+                            "summary", intent.replace("_", " ").title()
+                        ),
+                    }
+                )
 
         logger.info(f"[METADATA] Extracted {len(capabilities)} capabilities")
         return capabilities
@@ -80,9 +88,9 @@ def extract_all_capabilities(openapi_json: Dict[str, Any]) -> List[Dict[str, Any
 
 # Find capability by intent
 
+
 def get_capability_by_intent(
-    capabilities: List[Dict[str, Any]],
-    intent: str
+    capabilities: List[Dict[str, Any]], intent: str
 ) -> Optional[Dict[str, Any]]:
 
     logger.info(f"[METADATA] Searching capability for intent={intent}")
@@ -98,9 +106,9 @@ def get_capability_by_intent(
 
 # Extract schema fields
 
+
 def extract_form_fields_from_schema(
-    openapi_json: Dict[str, Any],
-    schema_name: str
+    openapi_json: Dict[str, Any], schema_name: str
 ) -> List[Dict[str, Any]]:
 
     logger.info(f"[METADATA] Extracting form fields for schema={schema_name}")
@@ -124,11 +132,13 @@ def extract_form_fields_from_schema(
         if field_type == "string" and field_info.get("format") == "date":
             field_type = "date"
 
-        form_fields.append({
-            "name": field_name,
-            "type": field_type,
-            "required": field_name in required_fields
-        })
+        form_fields.append(
+            {
+                "name": field_name,
+                "type": field_type,
+                "required": field_name in required_fields,
+            }
+        )
 
     logger.info(f"[METADATA] Extracted {len(form_fields)} form fields")
 

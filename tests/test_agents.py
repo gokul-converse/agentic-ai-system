@@ -16,6 +16,7 @@
 ################### test_summarization_agent.py
 
 from app.agents.domain.summarization_agent import SummarizationAgent
+
 agent = SummarizationAgent()
 
 print(agent.summarize("Who is MS Dhoni?"))

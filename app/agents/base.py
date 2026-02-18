@@ -33,7 +33,7 @@
 #                 "content": user_input.strip()
 #             }
 #         ]
-    
+
 #     def call_llm(self, messages):
 #         """
 #         Low level llm call, Agents should not override this unless absolutely required.
@@ -46,7 +46,7 @@
 #         )
 
 #         return response.choices[0].message.content.strip()
-    
+
 #     def run(self, user_input:str) -> str:
 #         """
 #         Standard entrypoint for all agents. this is what orchestrators and appi will call.
@@ -57,13 +57,13 @@
 #         return self.call_llm(messages)
 
 
-
-
-from app.services.llm_factory import get_llm
-from app.prompts.base_prompt import SYSTEM_BASE_PROMPT
 import os
 from typing import Optional
+
+from app.prompts.base_prompt import SYSTEM_BASE_PROMPT
+from app.services.llm_factory import get_llm
 from app.utils.logger import logger
+
 
 class BaseAgent:
     """
@@ -94,7 +94,7 @@ class BaseAgent:
         """
         return [
             {"role": "system", "content": self.system_prompt},
-            {"role": "user", "content": user_input.strip()}
+            {"role": "user", "content": user_input.strip()},
         ]
 
     def _build_gemini_prompt(self, user_input: str) -> str:
@@ -121,7 +121,9 @@ User input:
 
         # -------- Azure OpenAI --------
         if self.provider == "azure":
-            logger.info(f"[LLM CALL] provider=azure | deployment={self.deployment} | agent={self.name}")
+            logger.info(
+                f"[LLM CALL] provider=azure | deployment={self.deployment} | agent={self.name}"
+            )
 
             try:
                 messages = self._build_azure_messages(user_input)
@@ -130,20 +132,24 @@ User input:
                     model=self.deployment,
                     messages=messages,
                     temperature=0.2,
-                    max_tokens=5000
+                    max_tokens=5000,
                 )
 
                 return response.choices[0].message.content.strip()
-            
+
             except Exception as e:
-                logger.exception(f"[LLM ERROR] provider=azure | deployment={self.deployment} | agent={self.name}")
+                logger.exception(
+                    f"[LLM ERROR] provider=azure | deployment={self.deployment} | agent={self.name}"
+                )
                 raise
 
         # -------- Gemini (google-genai) --------
         elif self.provider == "gemini":
             model_name = os.getenv("GEMINI_MODEL")
 
-            logger.info(f"[LLM CALL] provider=gemini | model={model_name} | agent={self.name}")
+            logger.info(
+                f"[LLM CALL] provider=gemini | model={model_name} | agent={self.name}"
+            )
 
             try:
                 prompt = self._build_gemini_prompt(user_input)
@@ -154,14 +160,16 @@ User input:
                 )
 
                 return response.text.strip()
-            
+
             except Exception as e:
-                logger.exception(f"[LLM ERROR] provider=gemini | model={model_name} | agent={self.name}")
+                logger.exception(
+                    f"[LLM ERROR] provider=gemini | model={model_name} | agent={self.name}"
+                )
                 raise
 
         else:
             raise ValueError(f"Unsupported LLM_PROVIDER: {self.provider}")
-        
+
     def call_llm_with_tools(self, user_input: str, tools: list):
         """
         LLM call with tool support.
@@ -170,7 +178,9 @@ User input:
 
         # -------- Azure OpenAI --------
         if self.provider == "azure":
-            logger.info(f"[LLM TOOL CALL] provider=azure | deployment={self.deployment} | agent={self.name}")
+            logger.info(
+                f"[LLM TOOL CALL] provider=azure | deployment={self.deployment} | agent={self.name}"
+            )
 
             try:
                 messages = self._build_azure_messages(user_input)
@@ -181,40 +191,41 @@ User input:
                     tools=tools,
                     tool_choice="auto",
                     temperature=0.2,
-                    max_tokens=2000
+                    max_tokens=2000,
                 )
 
                 message = response.choices[0].message
 
                 return message  # contains .content and .tool_calls
-            
+
             except Exception:
                 logger.exception(f"[LLM TOOL ERROR] provider=azure | agent={self.name}")
                 raise
-
 
         # -------- Gemini --------
         elif self.provider == "gemini":
             model_name = os.getenv("GEMINI_MODEL")
 
-            logger.info(f"[LLM TOOL CALL] provider=gemini | model={model_name} | agent={self.name}")
+            logger.info(
+                f"[LLM TOOL CALL] provider=gemini | model={model_name} | agent={self.name}"
+            )
 
             try:
                 prompt = self._build_gemini_prompt(user_input)
 
                 response = self.llm.models.generate_content(
-                    model=model_name,
-                    contents=prompt,
-                    tools=tools
+                    model=model_name, contents=prompt, tools=tools
                 )
 
                 candidate = response.candidates[0]
                 content = candidate.content
 
                 return content  # will inspect for tool_calls later
-            
+
             except Exception:
-                logger.exception(f"[LLM TOOL ERROR] provider=gemini | agent={self.name}")
+                logger.exception(
+                    f"[LLM TOOL ERROR] provider=gemini | agent={self.name}"
+                )
                 raise
 
         else:
@@ -230,9 +241,6 @@ User input:
         Orchestrators and APIs should ONLY call this.
         """
         return self.call_llm(user_input)
-
-
-
 
 
 """

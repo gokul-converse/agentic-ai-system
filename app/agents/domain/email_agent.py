@@ -1,14 +1,16 @@
+import json
+
 from app.agents.base import BaseAgent
 from app.mcp.registry import TOOL_REGISTRY
 from app.utils.logger import logger
-import json
+
 
 class EmailAgent(BaseAgent):
 
     def __init__(self):
         super().__init__(
             name="email_agent",
-            role="Handles email generation and structured extraction"
+            role="Handles email generation and structured extraction",
         )
 
     def generate_email(self, user_input: str) -> dict:
@@ -24,10 +26,7 @@ class EmailAgent(BaseAgent):
         try:
             schema = TOOL_REGISTRY["send_email"]
 
-            message = self.call_llm_with_tools(
-                user_input=user_input,
-                tools=[schema]
-            )
+            message = self.call_llm_with_tools(user_input=user_input, tools=[schema])
 
             # Azure returns tool_calls inside message
             if hasattr(message, "tool_calls") and message.tool_calls:
@@ -43,15 +42,12 @@ class EmailAgent(BaseAgent):
                 else:
                     arguments = raw_arguments
 
-                return {
-                    "type": "confirm_email",
-                    "data": arguments
-                }
+                return {"type": "confirm_email", "data": arguments}
 
             # If no tool call returned
             return {
                 "type": "error",
-                "message": "LLM did not return structured email data."
+                "message": "LLM did not return structured email data.",
             }
 
         except Exception:

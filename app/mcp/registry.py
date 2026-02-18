@@ -1,4 +1,3 @@
-
 SEND_EMAIL_SCHEMA = {
     "type": "function",
     "function": {
@@ -9,22 +8,17 @@ SEND_EMAIL_SCHEMA = {
             "properties": {
                 "recipient": {
                     "type": "string",
-                    "description": "Email address or name of recipient"
+                    "description": "Email address or name of recipient",
                 },
                 "subject": {
                     "type": "string",
-                    "description": "Short professional subject line"
+                    "description": "Short professional subject line",
                 },
-                "body": {
-                    "type": "string",
-                    "description": "Professional email body"
-                }
+                "body": {"type": "string", "description": "Professional email body"},
             },
-            "required": ["recipient", "subject", "body"]
-        }
-    }
+            "required": ["recipient", "subject", "body"],
+        },
+    },
 }
 
-TOOL_REGISTRY = {
-    "send_email": SEND_EMAIL_SCHEMA
-}
+TOOL_REGISTRY = {"send_email": SEND_EMAIL_SCHEMA}

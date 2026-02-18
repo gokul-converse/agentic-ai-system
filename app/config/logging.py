@@ -8,6 +8,7 @@ os.makedirs(LOG_DIR, exist_ok=True)
 
 LOG_FORMAT = "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
 
+
 def setup_logging():
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)

@@ -1,15 +1,17 @@
-from typing import List, Dict
+import os
+from typing import Dict, List
+
 from app.agents.base import BaseAgent
 from app.rag.vectorstore import load_vectorstore
 from app.utils.logger import logger
-import os
+
 
 class KnowledgeAgent(BaseAgent):
 
     FALLBACK_MESSAGE = "I do not find this information in the company documents."
 
     def __init__(self):
-        super().__init__(name = "knowledge_agent", role = "Enterprise Knowledge Assistant")
+        super().__init__(name="knowledge_agent", role="Enterprise Knowledge Assistant")
 
         # Load vectorstore once
         self.vectorstore = load_vectorstore()
@@ -20,10 +22,7 @@ class KnowledgeAgent(BaseAgent):
 
         try:
             # Step 1: Retrieve Top 5 with scores
-            results = self.vectorstore.similarity_search_with_score(
-                user_input,
-                k=5
-            )
+            results = self.vectorstore.similarity_search_with_score(user_input, k=5)
 
             logger.info("[RAG] --- Similarity Scores ---")
 
@@ -55,14 +54,10 @@ class KnowledgeAgent(BaseAgent):
 
             logger.info(f"[RAG] Final selected documents: {len(docs)}")
 
-
             # Guard 1 — No documents retrieved from the vector DB - If docs is empty we do not call the llm , immediately fallback
             if not docs:
                 logger.info("[RAG] Guard 1 triggered - No documents retrieved")
-                return {
-                    "answer": self.FALLBACK_MESSAGE,
-                    "sources": []
-                }
+                return {"answer": self.FALLBACK_MESSAGE, "sources": []}
 
             # Step 5: Build context
             context = self._build_context(docs)
@@ -78,17 +73,13 @@ class KnowledgeAgent(BaseAgent):
     QUESTION:
     {user_input}
     """
-            #return super().run(grounded_prompt)   #---> If we dont need to show the metadata source pages we can use this alone..
+            # return super().run(grounded_prompt)   #---> If we dont need to show the metadata source pages we can use this alone..
             answer = super().run(grounded_prompt)
-
 
             # Guard 2 — LLM fallback detection -  Retriever DID return some documents. llm was called, but still respond "I do not..."
             if self.FALLBACK_MESSAGE in answer:
                 logger.info("[RAG] Guard 2 triggered - LLM fallback despite context")
-                return {
-                    "answer": self.FALLBACK_MESSAGE,
-                    "sources": []
-                }
+                return {"answer": self.FALLBACK_MESSAGE, "sources": []}
 
             # Step 5: Build context
             sources = []
@@ -104,23 +95,15 @@ class KnowledgeAgent(BaseAgent):
                 if page != "N/A":
                     url = f"{url}#page={page}"
 
-                sources.append({
-                    "file_name": file_name,
-                    "page": page,
-                    "url": url
-                })
+                sources.append({"file_name": file_name, "page": page, "url": url})
 
-            return {
-                "answer": answer,
-                "sources": sources
-            }
+            return {"answer": answer, "sources": sources}
 
         except Exception:
             logger.exception("[RAG ERROR] KnowledgeAgent failed")
             raise
 
-
-    def _build_context(self, docs:List) ->str:
+    def _build_context(self, docs: List) -> str:
         """
         Combines retrieved document chunks into single context string
         """

@@ -1,5 +1,7 @@
 from app.agents.base import BaseAgent
-from app.prompts.domain.summarization_agent_prompt import SUMMARIZATION_AGENT_SYSTEM_PROMPT
+from app.prompts.domain.summarization_agent_prompt import (
+    SUMMARIZATION_AGENT_SYSTEM_PROMPT,
+)
 from app.utils.logger import logger
 
 

@@ -1,19 +1,21 @@
 import json
-import re
 import os
+import re
 
 from app.agents.base import BaseAgent
 from app.prompts.domain.extraction_agent_prompt import EXTRACTION_AGENT_SYSTEM_PROMPT
-from app.tools.local.pdf_text_extractor import extract_text_from_pdf
-from app.tools.local.ocr_extractor import extract_text_with_ocr
 from app.tools.local.image_ocr_extractor import extract_text_from_image
+from app.tools.local.ocr_extractor import extract_text_with_ocr
+from app.tools.local.pdf_text_extractor import extract_text_from_pdf
 from app.utils.logger import logger
 
 
 class InvoiceExtractionAgent(BaseAgent):
 
     def __init__(self):
-        super().__init__(name="invoice_extraction_agent", role="Invoice Extraction Agent")
+        super().__init__(
+            name="invoice_extraction_agent", role="Invoice Extraction Agent"
+        )
         self.system_prompt = EXTRACTION_AGENT_SYSTEM_PROMPT
 
     def extract(self, file_path: str) -> dict:

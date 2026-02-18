@@ -13,14 +13,15 @@ from app.agents.base import BaseAgent
 from app.prompts.domain.sentiment_agent_prompt import SENTIMENT_AGENT_SYSTEM_PROMPT
 from app.utils.logger import logger
 
+
 class SentimentAgent(BaseAgent):
-    """Agent responsible for sentiment analysis with explainable output
-    """
+    """Agent responsible for sentiment analysis with explainable output"""
+
     def __init__(self):
-        super().__init__(name = 'sentiment_agent', role='Sentiment Analysis Agent')
+        super().__init__(name="sentiment_agent", role="Sentiment Analysis Agent")
         self.system_prompt = SENTIMENT_AGENT_SYSTEM_PROMPT
 
-    def analyse(self, text:str) -> str:
+    def analyse(self, text: str) -> str:
         """
         Analyse the sentiment of the given text
         """

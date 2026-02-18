@@ -7,7 +7,7 @@ EMPLOYEE_ANALYTICS_SAMPLE = {
     "selected_column": {
         "name": "salary",
         "description": "Employee base salary used for compensation analytics.",
-        "data_type": "number"
+        "data_type": "number",
     },
     "existing_columns": [
         {"name": "employee", "type": "string"},
@@ -19,6 +19,6 @@ EMPLOYEE_ANALYTICS_SAMPLE = {
         {"name": "status", "type": "string"},
         {"name": "growth", "type": "string"},
         {"name": "joinDate", "type": "string"},
-        {"name": "projects", "type": "number"}
-    ]
+        {"name": "projects", "type": "number"},
+    ],
 }

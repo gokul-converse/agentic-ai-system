@@ -1,5 +1,7 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+
 from app.utils.logger import logger
+
 
 def chunk_documents(documents):
     """
@@ -8,7 +10,7 @@ def chunk_documents(documents):
     logger.info(f"[RAG] Starting chunking. Input documents: {len(documents)}")
 
     try:
-        splitter = RecursiveCharacterTextSplitter(chunk_size = 800, chunk_overlap = 150)
+        splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=150)
 
         chunks = splitter.split_documents(documents)
         logger.info(f"[RAG] Chunking completed. Total chunks created: {len(chunks)}")

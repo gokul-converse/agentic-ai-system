@@ -1,6 +1,6 @@
 from app.tools.remote.metadata_extractor import (
-    fetch_openapi,
     extract_all_capabilities,
+    fetch_openapi,
     get_capability_by_intent,
 )
 

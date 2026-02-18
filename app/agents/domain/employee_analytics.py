@@ -1,10 +1,12 @@
 import json
-from app.agents.base import BaseAgent
-from app.utils.logger import logger
 
-from app.domains.employee_analytics.context_builder import EmployeeAnalyticsContextBuilder
+from app.agents.base import BaseAgent
+from app.domains.employee_analytics.context_builder import (
+    EmployeeAnalyticsContextBuilder,
+)
 from app.domains.employee_analytics.prompt_template import employee_analytics_prompt
 from app.domains.employee_analytics.validator import EmployeeAnalyticsValidator
+from app.utils.logger import logger
 
 
 class EmployeeAnalyticsAgent(BaseAgent):
@@ -12,7 +14,7 @@ class EmployeeAnalyticsAgent(BaseAgent):
     def __init__(self):
         super().__init__(
             name="employee_analytics_agent",
-            role="Employee Analytics & Chart Recommendation Agent"
+            role="Employee Analytics & Chart Recommendation Agent",
         )
 
     def run(self, payload: dict) -> dict:
@@ -36,9 +38,7 @@ class EmployeeAnalyticsAgent(BaseAgent):
         EmployeeAnalyticsValidator.validate(x_axis, context)
 
         # ---- resolve X table EXACTLY same way ----
-        x_column = next(
-            c for c in context["columns"] if c["name"] == x_axis
-        )
+        x_column = next(c for c in context["columns"] if c["name"] == x_axis)
 
         x_table_name = x_column["parent_table"]
 
@@ -50,5 +50,5 @@ class EmployeeAnalyticsAgent(BaseAgent):
                 "y": context["metric"],
                 "x_table_name": x_axis,
                 "y_table_name": context["y_table_name"],
-            }
+            },
         }

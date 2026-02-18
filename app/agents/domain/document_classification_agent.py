@@ -1,5 +1,7 @@
 from app.agents.base import BaseAgent
-from app.prompts.domain.classification_agent_prompt import CLASSIFICATION_AGENT_SYSTEM_PROMPT
+from app.prompts.domain.classification_agent_prompt import (
+    CLASSIFICATION_AGENT_SYSTEM_PROMPT,
+)
 from app.utils.logger import logger
 
 

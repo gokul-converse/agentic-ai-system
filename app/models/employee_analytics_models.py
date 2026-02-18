@@ -1,5 +1,6 @@
-from pydantic import BaseModel
 from typing import List
+
+from pydantic import BaseModel
 
 
 class ColumnSchema(BaseModel):
@@ -8,7 +9,7 @@ class ColumnSchema(BaseModel):
     data_type: str | None = None
     description: str | None = None
     is_separated: bool
-    parent_table: str   # 🔥 REQUIRED — NO DEFAULT
+    parent_table: str  # 🔥 REQUIRED — NO DEFAULT
 
 
 class SelectedColumnSchema(BaseModel):
@@ -16,7 +17,7 @@ class SelectedColumnSchema(BaseModel):
     description: str | None = None
     data_type: str
     is_separated: bool
-    parent_table: str   # 🔥 REQUIRED
+    parent_table: str  # 🔥 REQUIRED
 
 
 class EmployeeAnalyticsRequest(BaseModel):

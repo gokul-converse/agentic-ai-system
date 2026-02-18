@@ -1,5 +1,6 @@
 import pdfplumber
 
+
 def extract_text_from_pdf(file_path: str) -> str:
     full_text = []
 
@@ -10,6 +11,7 @@ def extract_text_from_pdf(file_path: str) -> str:
                 full_text.append(f"\n--- Page {page_number} ---\n{text}")
 
     return "\n".join(full_text)
+
 
 # This is for PDF text only even scanned pdfs wont work
 """

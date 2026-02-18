@@ -1,9 +1,12 @@
 import os
+
 from langchain_community.vectorstores import Chroma
+
 from app.rag.embeddings import get_embedding_model
 from app.utils.logger import logger
 
 PERSIST_DIR = "data/vectorstore"
+
 
 def build_vectorstore(chunks):
     """
@@ -16,9 +19,7 @@ def build_vectorstore(chunks):
         embeddings = get_embedding_model()
 
         vectorstore = Chroma.from_documents(
-            documents= chunks,
-            embedding=embeddings,
-            persist_directory=PERSIST_DIR
+            documents=chunks, embedding=embeddings, persist_directory=PERSIST_DIR
         )
 
         vectorstore.persist()
@@ -26,10 +27,11 @@ def build_vectorstore(chunks):
         logger.info("[RAG] Vector store created and persisted")
 
         return vectorstore
-    
+
     except Exception:
         logger.exception("[RAG ERROR] Failed to build vector store")
         raise
+
 
 def load_vectorstore():
     """
@@ -42,14 +44,13 @@ def load_vectorstore():
         embeddings = get_embedding_model()
 
         vector_store = Chroma(
-            persist_directory=PERSIST_DIR,
-            embedding_function=embeddings
+            persist_directory=PERSIST_DIR, embedding_function=embeddings
         )
 
         logger.info("[RAG] Vector store loaded successfully")
 
         return vector_store
-    
+
     except Exception:
         logger.exception("[RAG ERROR] Failed to load vector store")
         raise

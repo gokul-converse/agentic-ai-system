@@ -1,12 +1,12 @@
 from app.agents.base import BaseAgent
 from app.domains.employee_analytics_summary.context_builder import (
-    EmployeeAnalyticsSummaryContextBuilder
+    EmployeeAnalyticsSummaryContextBuilder,
 )
 from app.domains.employee_analytics_summary.prompt_template import (
-    employee_analytics_summary_prompt
+    employee_analytics_summary_prompt,
 )
 from app.domains.employee_analytics_summary.validator import (
-    EmployeeAnalyticsSummaryValidator
+    EmployeeAnalyticsSummaryValidator,
 )
 
 
@@ -15,7 +15,7 @@ class EmployeeAnalyticsSummaryAgent(BaseAgent):
     def __init__(self):
         super().__init__(
             name="employee_analytics_summary_agent",
-            role="Employee Analytics Insight & Summary Agent"
+            role="Employee Analytics Insight & Summary Agent",
         )
 
     def run(self, payload: dict) -> dict:
@@ -32,6 +32,4 @@ class EmployeeAnalyticsSummaryAgent(BaseAgent):
         summary = self.call_llm(prompt)
 
         # 5️⃣ Return summarized insight
-        return {
-            "summary": summary.strip()
-        }
+        return {"summary": summary.strip()}

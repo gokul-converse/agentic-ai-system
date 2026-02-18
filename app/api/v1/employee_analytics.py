@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+
 from app.agents.domain.employee_analytics import EmployeeAnalyticsAgent
 from app.models.employee_analytics_models import EmployeeAnalyticsRequest
 

@@ -12,17 +12,15 @@ class EmployeeAnalyticsContextBuilder:
         # ---- find metric column from schema ----
         metric_column = next(
             (
-                c for c in columns
-                if c.get("name", "").strip().lower()
-                == metric_name.strip().lower()
+                c
+                for c in columns
+                if c.get("name", "").strip().lower() == metric_name.strip().lower()
             ),
-            None
+            None,
         )
 
         if not metric_column:
-            raise ValueError(
-                f"Metric '{metric_name}' not found in existing_columns"
-            )
+            raise ValueError(f"Metric '{metric_name}' not found in existing_columns")
 
         # 🔑 SINGLE SOURCE OF TRUTH
         y_table_name = metric_column["parent_table"]
@@ -42,5 +40,5 @@ class EmployeeAnalyticsContextBuilder:
             "metric": metric_name,
             "y_table_name": y_table_name,
             "x_candidates": x_candidates,
-            "columns": columns
+            "columns": columns,
         }
