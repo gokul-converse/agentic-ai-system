@@ -5,21 +5,66 @@ from app.utils.logger import logger
 import os
 
 class KnowledgeAgent(BaseAgent):
+
+    FALLBACK_MESSAGE = "I do not find this information in the company documents."
+
     def __init__(self):
         super().__init__(name = "knowledge_agent", role = "Enterprise Knowledge Assistant")
 
         # Load vectorstore once
         self.vectorstore = load_vectorstore()
-        self.retriever = self.vectorstore.as_retriever(search_kwargs = {"k":3})
 
     def answer(self, user_input: str) -> dict:
 
         logger.info("[AGENT] knowledge_agent invoked")
 
         try:
-            docs = self.retriever.invoke(user_input)
-            logger.info(f"[RAG] Retrieved {len(docs)} documents")
+            # Step 1: Retrieve Top 5 with scores
+            results = self.vectorstore.similarity_search_with_score(
+                user_input,
+                k=5
+            )
 
+            logger.info("[RAG] --- Similarity Scores ---")
+
+            # Step 2: Sort by score (lower = more similar)
+            results = sorted(results, key=lambda x: x[1])
+
+            # Step 3: Remove duplicates (same file + page)
+            unique = {}
+            for doc, score in results:
+                source = doc.metadata.get("source")
+                page = doc.metadata.get("page")
+
+                key = (source, page)
+
+                if key not in unique:
+                    unique[key] = (doc, score)
+
+            # Step 4: Take best 3 unique results
+            top_results = list(unique.values())[:3]
+
+            docs = []
+            for doc, score in top_results:
+                logger.info(
+                    f"[RAG SCORE] {score:.4f} | "
+                    f"{doc.metadata.get('source')} | "
+                    f"page={doc.metadata.get('page')}"
+                )
+                docs.append(doc)
+
+            logger.info(f"[RAG] Final selected documents: {len(docs)}")
+
+
+            # Guard 1 — No documents retrieved from the vector DB - If docs is empty we do not call the llm , immediately fallback
+            if not docs:
+                logger.info("[RAG] Guard 1 triggered - No documents retrieved")
+                return {
+                    "answer": self.FALLBACK_MESSAGE,
+                    "sources": []
+                }
+
+            # Step 5: Build context
             context = self._build_context(docs)
 
             grounded_prompt = f"""
@@ -36,19 +81,16 @@ class KnowledgeAgent(BaseAgent):
             #return super().run(grounded_prompt)   #---> If we dont need to show the metadata source pages we can use this alone..
             answer = super().run(grounded_prompt)
 
-            # sources = [
-            #     {
-            #         "source": doc.metadata.get("source", "unknown"),
-            #         "page": doc.metadata.get("page", "N/A")
-            #     }
-            #     for doc in docs
-            # ]
 
-            # return {
-            #     "answer": answer,
-            #     "sources": sources
-            # }
+            # Guard 2 — LLM fallback detection -  Retriever DID return some documents. llm was called, but still respond "I do not..."
+            if self.FALLBACK_MESSAGE in answer:
+                logger.info("[RAG] Guard 2 triggered - LLM fallback despite context")
+                return {
+                    "answer": self.FALLBACK_MESSAGE,
+                    "sources": []
+                }
 
+            # Step 5: Build context
             sources = []
 
             for doc in docs:
