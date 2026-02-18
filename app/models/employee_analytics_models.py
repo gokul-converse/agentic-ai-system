@@ -1,21 +1,26 @@
 from pydantic import BaseModel
-from typing import List, Dict
+from typing import List
 
 
-class SelectedColumn(BaseModel):
+class ColumnSchema(BaseModel):
     name: str
-    description: str
+    type: str | None = None
+    data_type: str | None = None
+    description: str | None = None
+    is_separated: bool
+    parent_table: str   # 🔥 REQUIRED — NO DEFAULT
+
+
+class SelectedColumnSchema(BaseModel):
+    name: str
+    description: str | None = None
     data_type: str
-
-
-class ExistingColumn(BaseModel):
-    name: str
-    type: str
-    description: str
+    is_separated: bool
+    parent_table: str   # 🔥 REQUIRED
 
 
 class EmployeeAnalyticsRequest(BaseModel):
     table_name: str
-    table_description: str
-    selected_column: SelectedColumn
-    existing_columns: List[ExistingColumn]
+    table_description: str | None = None
+    selected_column: SelectedColumnSchema
+    existing_columns: List[ColumnSchema]
