@@ -23,7 +23,7 @@ def setup_logging():
     console_handler.setFormatter(formatter)
 
     # File handler (all logs)
-    file_handler = logging.FileHandler(os.path.join(LOG_DIR, "app.log"), mode="a")
+    file_handler = logging.FileHandler(os.path.join(LOG_DIR, "app.log"), mode="w")
     file_handler.setFormatter(formatter)
 
     # Error file handler (only errors)
