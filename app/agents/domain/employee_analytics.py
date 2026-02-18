@@ -48,7 +48,7 @@ class EmployeeAnalyticsAgent(BaseAgent):
                 "type": chart_type,
                 "x": x_axis,
                 "y": context["metric"],
-                "x_table_name": x_table_name,
+                "x_table_name": x_axis,
                 "y_table_name": context["y_table_name"],
             }
         }
