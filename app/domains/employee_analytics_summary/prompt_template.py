@@ -7,6 +7,13 @@ DO NOT recalculate values.
 DO NOT infer missing data.
 ONLY summarize what is explicitly provided.
 
+IMPORTANT FORMATTING RULES:
+- Use **bold** for key numeric values (avg, min, max, sum).
+- Use *italic* for column names and axis references.
+- Use plain paragraphs (no bullet points).
+- Output MUST be valid Markdown.
+- Keep the summary concise (2–3 sentences).
+
 Chart Information:
 - Chart Type: {context["chart_type"]}
 - X Axis: {context["x_axis"]}
@@ -20,6 +27,5 @@ Aggregated Metrics:
 - Maximum: {context["aggregations"]["max"]}
 - Total: {context["aggregations"]["sum"]}
 
-Write a concise analytical summary in 2–3 sentences.
-Use professional, factual language.
+Write a professional analytical summary using Markdown formatting.
 """
